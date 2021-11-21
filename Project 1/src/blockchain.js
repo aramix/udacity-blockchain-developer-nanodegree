@@ -121,7 +121,9 @@ class Blockchain {
             owner: address,
             star,
           });
-          resolve(await self._addBlock(block));
+          const newlyAddedBlock = await self._addBlock(block);
+          await self.validateChain();
+          resolve(newlyAddedBlock);
         }
       } catch (error) {
         reject(error.message);
@@ -199,7 +201,7 @@ class Blockchain {
     let errorLog = [];
     return new Promise(async (resolve, reject) => {
       self.chain.forEach(async (block) => {
-        if (await block.validate()) {
+        if (!(await block.validate())) {
           errorLog.push(`Invalid block with height ${block.height}`);
           if (block.previousBlockHash) {
             if (self.chain[block.height - 1].hash !== block.previousBlockHash) {
