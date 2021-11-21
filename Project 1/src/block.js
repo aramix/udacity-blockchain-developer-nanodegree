@@ -48,7 +48,7 @@ class Block {
       // Comparing if the hashes changed
       if (currentBlockHash !== recalculatedBlockHash) {
         // Returning the Block is not valid
-        reject(false);
+        resolve(false);
       } else {
         // Returning the Block is valid
         resolve(true);
